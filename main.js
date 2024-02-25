@@ -36,7 +36,7 @@ if(localStorage.product != null){
 
 submit.onclick = function(){
     //way to create object
-    if(updateMode === "create" && title.value != "" && price.value != "" && category.value != "" && count.value != ""){
+    if(updateMode === "update" || (title.value != "" && price.value != "" && category.value != "" && count.value != "")){
 
         document.getElementById("comment-ifnull").innerHTML=""
     let newPro = {
@@ -50,7 +50,6 @@ submit.onclick = function(){
         tot:tot.innerHTML,
     }
     //-------- 8-count ----------//
-    console.log("dfd")
     if(updateMode === "create"){
         if(newPro.count != null){
         for(let i = 0; i <= newPro.count; i++){
