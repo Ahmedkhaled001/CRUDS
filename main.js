@@ -36,7 +36,7 @@ if(localStorage.product != null){
 
 submit.onclick = function(){
     //way to create object
-    if(title.value != "" && price.value != "" && category.value != "" && count.value != ""){
+    if(updateMode === "create" && title.value != "" && price.value != "" && category.value != "" && count.value != ""){
 
         document.getElementById("comment-ifnull").innerHTML=""
     let newPro = {
