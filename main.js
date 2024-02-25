@@ -8,7 +8,7 @@ let tot = document.getElementById("tot")
 let count = document.getElementById("count")
 let category = document.getElementById("category")
 let submit = document.getElementById("submit")
-let updateMode = "Create"
+let updateMode = "create"
 let tmp
 
 
@@ -27,18 +27,18 @@ function gettotal(){
 //---------------------------------------------------------------------------------------------------//
 //--------------------- 2-create ----------------------
 
-let dataPro;
+let dataPro =[]
 //لو في داتا 
 if(localStorage.product != null){
-    //json.parse = transform data to real type
     dataPro = JSON.parse(localStorage.product)
     
-}else{
-    dataPro = []
 }
 
 submit.onclick = function(){
     //way to create object
+    if(title.value != "" && price.value != "" && category.value != "" && count.value != ""){
+
+        document.getElementById("comment-ifnull").innerHTML=""
     let newPro = {
         title:title.value.toLowerCase(),
         price:price.value,
@@ -49,17 +49,15 @@ submit.onclick = function(){
         category:category.value.toLowerCase(),
         tot:tot.innerHTML,
     }
-    //push = add data without delete old data
     //-------- 8-count ----------//
-    // الشرط ده معمول عشان اي عدد منتجات يتكتب في الكاونت يتكرر زي ما هو ويتضاف
+    console.log("dfd")
     if(updateMode === "create"){
-        if(newPro.count > 1){
-        for(let i = 0; i < newPro.count; i++){
+        if(newPro.count != null){
+        for(let i = 0; i <= newPro.count; i++){
             dataPro.push(newPro)
         }
-        }else{
-        dataPro.push(newPro)
         }
+
     }else{
         dataPro[tmp] = newPro
         submit.innerHTML = "Create"
@@ -69,14 +67,14 @@ submit.onclick = function(){
     }
     
     //---------- 3-save to localstorage ----------------
-    //localstorage = add data to قواعد البيانات
-    //json.stringify = transform data to string
     localStorage.setItem("product", JSON.stringify(dataPro))
 
     cleanData()
     showData()
 
-}
+}else{
+    document.getElementById("comment-ifnull").innerHTML="*please add title , price , category and count"
+}}
 //---------------------------------------------------------------------------------------------------//
 //------- 4-clean data from inputboxes after click on create --------
 function cleanData(){
@@ -92,11 +90,9 @@ function cleanData(){
 }
 //---------------------------------------------------------------------------------------------------//
 //------ 5-read data at table ---------
-//فكرته اننا اي كلام بندخله للدتا بيز بعد مابندوس كرييت بنرجع نستورده وندخله في القوايم بتاعتنا
 function showData(){
     gettotal()
     let table = ""
-//لازم نعمل لووب عشان كل مره نعرض الداتا القديمه بالاضافه للجديده
     for ( let i = 1; i < dataPro.length; i++){
         table += `
         <tbody>
@@ -114,8 +110,6 @@ function showData(){
     }
     document.getElementById("tbody").innerHTML = table;
 
-    //هنا بنعمل زرار هيظهر بس لما يكون في بيانات بس في الجداول
-    //لو مفيش بيانات الزرار هيختفي
     let btnDelete = document.getElementById("deleteAll")
     if(dataPro.length > 0){btnDelete.innerHTML = `
     <button onclick = deleteAll()>Delete All (${dataPro.length})</button>
@@ -124,15 +118,10 @@ function showData(){
         btnDelete.innerHTML = ''
     }
 }
-//هنا بننادي علي الفانكشن مرتين مره هنا بعديها ومره جوه الفانكشن بتاعت كرييت
-//عشان اول ماندوس كرييت نشغل الفانكشن وتشتغل مره تانيه باستمرار عشان الداتا متتمسحش
 showData()
 //---------------------------------------------------------------------------------------------------//
 
 //------- 6-Delete element-------//
-//فكره عملها اننا بنعمل فصل للاراي دي عن طريق الاسبلايس وبنختاره عن طريق الانديكس
-//وبنحط عدد الاراي الي عايزين نمسحها في الاسبلايس جنب ال i
-//وبننادي علي شوو داتا عشان يحدث الصفحه ويورينا اننا مسحنا الاراي فعلا
 function deleteElement(i){
     dataPro.splice(i,1)
     localStorage.product = JSON.stringify(dataPro)
@@ -142,8 +131,6 @@ function deleteElement(i){
 //---------------------------------------------------------------------------------------------------//
 
 //-------- 7-Delete all ----------//
-//زي فانكشن اللي بتمسح عنصر واحد بس الاسبلايس بصفر عشان يمسح كله
-//وهنا الداتا بيز بنعملها كلير عشان نمسح كل حاجه فيها
 function deleteAll(){
     dataPro.splice(0)
     localStorage.clear()
@@ -181,15 +168,7 @@ function updateData(i){
 //-------- 9-Search ----------//
 let search = document.getElementById("searchBox")
 let searchMode = "title"
-/*اول حاجه بنربط كل زرار للسيرش عشان البرنامج يعرف احنا بننادي علي مين فيهم
-تاني حاجه بنربطه عن طريق الاي دي بتاعه وبنحط الاكشن في ال html
-تالت حاجه بنخلي البرنامج اول مابندوس علي اي زرار من بتوع السيرش يعمل فوكاس
-للبوكس بتاع السيرش كاننا هنكتب فيه
-رابع حاجه
 
-
-
-*/
 function getSearchMode(id){
     if(id === 'searchTitle'){
         searchMode = "title"
